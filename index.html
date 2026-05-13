@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>企业级智能体平台 — Demo</title>
+<title>YoucashClaw|智能体平台 — Demo</title>
 <style>
 :root {
   --bg: #f1f5f9;
@@ -92,7 +92,15 @@ body {
 }
 .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-title-row { display: flex; align-items: center; gap: 8px; }
 .card-title { font-size: 16px; font-weight: 600; }
+.card-edit-btn {
+  width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border);
+  background: #fff; cursor: pointer; font-size: 12px; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center; transition: var(--transition);
+  flex-shrink: 0;
+}
+.card-edit-btn:hover { background: #f1f5f9; color: var(--text); border-color: #94a3b8; }
 .card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; flex: 1; }
 .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
 .card-time { font-size: 12px; color: #94a3b8; }
@@ -101,18 +109,23 @@ body {
   font-size: 11px; padding: 2px 8px; border-radius: 4px;
   background: #f1f5f9; color: #475569; font-weight: 500;
 }
+.skill-tag.clickable {
+  cursor: pointer; transition: var(--transition);
+}
+.skill-tag.clickable:hover { background: #dbeafe; color: #1d4ed8; }
 
 /* ── Status badges ─────────────── */
 .status {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px;
   border-radius: 99px; font-size: 12px; font-weight: 600; white-space: nowrap;
 }
-.status-dot { width: 6px; height: 6px; border-radius: 50%; }
-.status.review  { background: #dbeafe; color: #1d4ed8; } .status.review .status-dot  { background: #3b82f6; }
-.status.passed  { background: #d1fae5; color: #065f46; } .status.passed .status-dot  { background: #10b981; }
-.status.rejected{ background: #fee2e2; color: #991b1b; } .status.rejected .status-dot{ background: #ef4444; }
-.status.running { background: #dcfce7; color: #166534; } .status.running .status-dot { background: #22c55e; }
-.status.stopped { background: #f3f4f6; color: #6b7280; } .status.stopped .status-dot { background: #9ca3af; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.status.review   { background: #dbeafe; color: #1d4ed8; } .status.review .status-dot   { background: #3b82f6; }
+.status.starting { background: #fef3c7; color: #92400e; } .status.starting .status-dot { background: #f59e0b; }
+.status.running  { background: #dcfce7; color: #166534; } .status.running .status-dot  { background: #22c55e; }
+.status.stopped  { background: #f3f4f6; color: #6b7280; } .status.stopped .status-dot  { background: #9ca3af; }
+.status.rejected { background: #fee2e2; color: #991b1b; } .status.rejected .status-dot { background: #ef4444; }
+.status.failed   { background: #fef2f2; color: #991b1b; } .status.failed .status-dot   { background: #ef4444; }
 
 /* ── Toggle switch ─────────────── */
 .toggle {
@@ -148,6 +161,8 @@ th { background: #f8fafc; font-weight: 600; font-size: 13px; color: #475569; tex
 td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #f8fafc; }
+tr.row-warn td { background: #fffbeb; }
+tr.row-warn:hover td { background: #fef3c7; }
 .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 16px; font-size: 13px; color: var(--text-secondary); }
 .pagination button { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; cursor: pointer; font-size: 13px; transition: var(--transition); }
 .pagination button:hover { background: #f1f5f9; }
@@ -181,13 +196,14 @@ tr:hover td { background: #f8fafc; }
 .drawer-info-row .value { font-weight: 500; }
 
 /* ── Stats cards ─────────────── */
-.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 24px; }
 .stat-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px 24px; box-shadow: var(--shadow);
+  padding: 16px 20px; box-shadow: var(--shadow); text-align: center;
 }
-.stat-card .stat-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
-.stat-card .stat-value { font-size: 30px; font-weight: 700; }
+.stat-card .stat-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.stat-card .stat-value { font-size: 28px; font-weight: 700; }
+.stat-card.token-card .stat-value { font-size: 22px; }
 
 /* ── Detail page ─────────────── */
 .detail-block {
@@ -195,7 +211,7 @@ tr:hover td { background: #f8fafc; }
   padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow);
 }
 .detail-block h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-.detail-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.detail-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
 .detail-actions { display: flex; gap: 8px; }
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .detail-item { padding: 6px 0; }
@@ -230,6 +246,29 @@ tr:hover td { background: #f8fafc; }
 .template-preview .tp-desc { font-size: 13px; color: var(--text-secondary); }
 .field-error { color: var(--danger); font-size: 12px; margin-top: 4px; display: none; }
 
+/* ── Inline edit ─────────────── */
+.inline-edit-name {
+  font-size: 16px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); outline: none; width: 100%; max-width: 300px;
+}
+.inline-edit-name:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+.inline-edit-desc {
+  font-size: 14px; padding: 6px 10px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); outline: none; width: 100%; resize: vertical;
+  font-family: inherit; min-height: 60px;
+}
+.inline-edit-desc:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+
+/* ── Skill popover ─────────────── */
+.skill-popover {
+  position: fixed; z-index: 500; background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 16px; box-shadow: var(--shadow-md);
+  font-size: 13px; max-width: 260px; opacity: 0; pointer-events: none; transition: opacity .15s;
+}
+.skill-popover.show { opacity: 1; pointer-events: auto; }
+.skill-popover .popover-skill-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.skill-popover .popover-skill-desc { color: var(--text-secondary); line-height: 1.5; }
+
 /* ── Progress bar ─────────────── */
 .progress-bar {
   height: 6px; border-radius: 3px; background: #e5e7eb; overflow: hidden; margin-top: 2px;
@@ -243,6 +282,20 @@ tr:hover td { background: #f8fafc; }
 .trend-up { color: #dc2626; }
 .trend-down { color: #16a34a; }
 .trend-flat { color: #6b7280; }
+
+/* ── Modal ─────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+.modal {
+  background: #fff; border-radius: var(--radius); padding: 24px;
+  width: 440px; max-width: 90vw; box-shadow: 0 16px 48px rgba(0,0,0,.18);
+}
+.modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.modal .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
 /* ── Misc ─────────────── */
 .back-link { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; color: var(--text-secondary); cursor: pointer; border: none; background: none; margin-bottom: 16px; text-decoration: none; }
@@ -269,7 +322,7 @@ tr:hover td { background: #f8fafc; }
 <!-- ═══════════════════ HEADER ═══════════════════ -->
 <header class="app-header">
   <div style="display:flex;align-items:center;gap:32px;">
-    <div class="logo"><span class="dot"></span>企业级智能体平台</div>
+    <div class="logo"><span class="dot"></span>YoucashClaw|智能体平台</div>
     <nav class="nav-tabs" id="navTabs"></nav>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
@@ -285,6 +338,31 @@ tr:hover td { background: #f8fafc; }
 <!-- ═══════════════════ TOAST ═══════════════════ -->
 <div class="toast" id="toast"></div>
 
+<!-- ═══════════════════ SKILL POPOVER ═══════════════════ -->
+<div class="skill-popover" id="skillPopover"></div>
+
+<!-- ═══════════════════ EDIT MODAL ═══════════════════ -->
+<div class="modal-overlay" id="editModalOverlay" onclick="closeEditModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>编辑实例信息</h3>
+    <div class="form-group">
+      <label>实例名称 <span class="required">*</span></label>
+      <input type="text" id="editModalName" maxlength="50" placeholder="请输入实例名称" oninput="validateEditModal()">
+      <div class="field-error" id="editModalNameError"></div>
+      <div class="hint">最多50字符，允许中文/英文/数字/下划线/中划线</div>
+    </div>
+    <div class="form-group">
+      <label>实例描述</label>
+      <textarea id="editModalDesc" maxlength="200" placeholder="请输入实例描述" oninput="document.getElementById('editModalCount').textContent=this.value.length"></textarea>
+      <div class="hint"><span id="editModalCount">0</span>/200</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">取消</button>
+      <button class="btn btn-primary" id="editModalSaveBtn" onclick="saveEditModal()">保存</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
 <main class="page-content" id="mainContent"></main>
 
@@ -298,6 +376,21 @@ const ROLE_USER = 'user';
 const ROLE_ADMIN = 'admin';
 let currentRole = ROLE_USER;
 let currentPage = '';
+let editingInstanceId = null;
+
+// ── Skill descriptions (for popover) ──────────────────
+const skillDescriptions = {
+  '对话': '通用自然语言对话能力，支持多轮交互、上下文理解与意图识别',
+  '搜索': '基于知识库的语义搜索能力，支持多源检索与结果排序',
+  '审查': '自动化代码审查，检测安全漏洞、代码规范及潜在缺陷',
+  '分析': '数据挖掘与统计分析，生成洞察报告与趋势预测',
+  '图表': '自动生成可视化图表，支持柱状图、折线图、饼图等多种形式',
+  '写作': '辅助撰写各类文档，支持结构化输出与风格定制',
+  '情绪分析': '识别对话中的情感倾向，支持正面/负面/中性分类',
+  '翻译': '多语种实时翻译，支持中/英/日/韩/法/德等主流语言',
+  '测试': '基于代码逻辑自动生成单元测试用例，支持主流测试框架',
+  'SQL': '自然语言转SQL查询，支持MySQL/PostgreSQL/BigQuery等',
+};
 
 // ── Mock data ──────────────────
 const templates = [
@@ -312,13 +405,14 @@ const templates = [
 ];
 
 const instances = [
-  { id:'A001', name:'智能助手-Pro', userId:'zhangsan', userName:'张三', template:'智能助手模板', env:'生产', status:'running', skills:['对话','搜索'], desc:'基于GPT-4的智能对话助手，支持多轮对话、上下文记忆、知识库检索，适用于日常办公场景的智能问答与辅助。', createdAt:'2026-05-10 14:30', updatedAt:'2026-05-12 09:15', cpu:42, mem:512, inputToken:45230, outputToken:38910, totalToken:84140, reviewComment:'' },
-  { id:'A002', name:'代码审查助手', userId:'lisi', userName:'李四', template:'代码审查模板', env:'测试', status:'running', skills:['审查','分析'], desc:'自动审查提交代码，检测安全漏洞和代码规范问题。', createdAt:'2026-05-09 10:00', updatedAt:'2026-05-12 08:30', cpu:68, mem:890, inputToken:12000, outputToken:8500, totalToken:20500, reviewComment:'' },
-  { id:'A003', name:'数据分析助手', userId:'wangwu', userName:'王五', template:'数据分析模板', env:'生产', status:'stopped', skills:['分析','图表'], desc:'自动分析业务数据生成可视化报表。', createdAt:'2026-05-05 09:00', updatedAt:'2026-05-10 16:00', cpu:0, mem:0, inputToken:2800, outputToken:4500, totalToken:7300, reviewComment:'' },
-  { id:'A004', name:'文档撰写助手', userId:'zhaoliu', userName:'赵六', template:'智能助手模板', env:'开发', status:'running', skills:['写作'], desc:'辅助撰写技术文档与周报。', createdAt:'2026-05-01 11:00', updatedAt:'2026-05-12 07:00', cpu:89, mem:1638, inputToken:8000, outputToken:6000, totalToken:14000, reviewComment:'' },
-  { id:'A005', name:'客服机器人', userId:'zhangsan', userName:'张三', template:'客服对话模板', env:'生产', status:'review', skills:['对话','情绪分析'], desc:'智能客服对话机器人，用于官网在线客服场景。', createdAt:'2026-05-12 10:00', updatedAt:'2026-05-12 10:00', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'' },
-  { id:'A006', name:'SQL查询助手', userId:'lisi', userName:'李四', template:'SQL生成模板', env:'生产', status:'passed', skills:['SQL','分析'], desc:'自然语言转SQL，连接公司BigQuery数据仓库。', createdAt:'2026-05-11 15:00', updatedAt:'2026-05-12 11:00', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'' },
-  { id:'A007', name:'翻译小助手', userId:'wangwu', userName:'王五', template:'翻译助手模板', env:'测试', status:'rejected', skills:['翻译'], desc:'文档翻译工具。', createdAt:'2026-05-08 09:00', updatedAt:'2026-05-09 14:00', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'您的实例用途描述不够清晰，请补充具体使用场景后重新提交。' },
+  { id:'A001', name:'智能助手-Pro', userId:'zhangsan', userName:'张三', template:'智能助手模板', env:'生产网', status:'running', skills:['对话','搜索'], desc:'基于GPT-4的智能对话助手，支持多轮对话、上下文记忆、知识库检索，适用于日常办公场景的智能问答与辅助。', createdAt:'2026-05-10 14:30', updatedAt:'2026-05-12 09:15', cpu:42, mem:512, inputToken:45230, outputToken:38910, totalToken:84140, reviewComment:'' },
+  { id:'A002', name:'代码审查助手', userId:'lisi', userName:'李四', template:'代码审查模板', env:'办公网', status:'running', skills:['审查','分析'], desc:'自动审查提交代码，检测安全漏洞和代码规范问题。', createdAt:'2026-05-09 10:00', updatedAt:'2026-05-12 08:30', cpu:68, mem:890, inputToken:12000, outputToken:8500, totalToken:20500, reviewComment:'' },
+  { id:'A003', name:'数据分析助手', userId:'wangwu', userName:'王五', template:'数据分析模板', env:'生产网', status:'stopped', skills:['分析','图表'], desc:'自动分析业务数据生成可视化报表。', createdAt:'2026-05-05 09:00', updatedAt:'2026-05-10 16:00', cpu:0, mem:0, inputToken:2800, outputToken:4500, totalToken:7300, reviewComment:'' },
+  { id:'A004', name:'文档撰写助手', userId:'zhaoliu', userName:'赵六', template:'智能助手模板', env:'办公网', status:'running', skills:['写作'], desc:'辅助撰写技术文档与周报。', createdAt:'2026-05-01 11:00', updatedAt:'2026-05-12 07:00', cpu:89, mem:1638, inputToken:8000, outputToken:6000, totalToken:14000, reviewComment:'' },
+  { id:'A005', name:'客服机器人', userId:'zhangsan', userName:'张三', template:'客服对话模板', env:'生产网', status:'review', skills:['对话','情绪分析'], desc:'智能客服对话机器人，用于官网在线客服场景。', createdAt:'2026-05-12 10:00', updatedAt:'2026-05-12 10:00', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'' },
+  { id:'A006', name:'SQL查询助手', userId:'lisi', userName:'李四', template:'SQL生成模板', env:'生产网', status:'starting', skills:['SQL','分析'], desc:'自然语言转SQL，连接公司BigQuery数据仓库。', createdAt:'2026-05-11 15:00', updatedAt:'2026-05-12 11:00', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'' },
+  { id:'A007', name:'翻译小助手', userId:'wangwu', userName:'王五', template:'翻译助手模板', env:'办公网', status:'rejected', skills:['翻译'], desc:'文档翻译工具。', createdAt:'2026-05-08 09:00', updatedAt:'2026-05-09 14:00', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'您的实例用途描述不够清晰，请补充具体使用场景后重新提交。' },
+  { id:'A008', name:'测试生成助手', userId:'zhangsan', userName:'张三', template:'测试生成模板', env:'办公网', status:'failed', skills:['测试','分析'], desc:'自动生成单元测试用例。', createdAt:'2026-05-06 08:00', updatedAt:'2026-05-06 08:05', cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:'' },
 ];
 
 const users = [
@@ -335,22 +429,26 @@ const users = [
 ];
 
 const tokenData = [
-  { id:'prod-ns1-agent-smart-pro', inputToken:12450, outputToken:8320, totalToken:20770, trend:'up', trendPct:'+12%' },
-  { id:'test-ns2-agent-code-review', inputToken:5200, outputToken:3100, totalToken:8300, trend:'down', trendPct:'-3%' },
-  { id:'prod-ns1-agent-data-analyze', inputToken:2800, outputToken:4500, totalToken:7300, trend:'flat', trendPct:'持平' },
-  { id:'dev-ns3-agent-doc-writer', inputToken:6600, outputToken:5100, totalToken:11700, trend:'up', trendPct:'+8%' },
-  { id:'prod-ns1-agent-cs-bot', inputToken:3200, outputToken:2800, totalToken:6000, trend:'down', trendPct:'-5%' },
+  { cluster:'prod-cl', namespace:'ns-1', workload:'agent-svc', podName:'smart-pro', inputToken:12450, outputToken:8320, totalToken:20770, trend:'up', trendPct:'+12%' },
+  { cluster:'test-cl', namespace:'ns-2', workload:'agent-svc', podName:'code-review', inputToken:5200, outputToken:3100, totalToken:8300, trend:'down', trendPct:'-3%' },
+  { cluster:'prod-cl', namespace:'ns-1', workload:'agent-svc', podName:'data-analyze', inputToken:2800, outputToken:4500, totalToken:7300, trend:'flat', trendPct:'持平' },
+  { cluster:'dev-cl', namespace:'ns-3', workload:'agent-svc', podName:'doc-writer', inputToken:6600, outputToken:5100, totalToken:11700, trend:'up', trendPct:'+8%' },
+  { cluster:'prod-cl', namespace:'ns-1', workload:'agent-svc', podName:'cs-bot', inputToken:3200, outputToken:2800, totalToken:6000, trend:'down', trendPct:'-5%' },
+  { cluster:'test-cl', namespace:'ns-2', workload:'agent-svc', podName:'sql-query', inputToken:8900, outputToken:7200, totalToken:16100, trend:'up', trendPct:'+15%' },
+  { cluster:'prod-cl', namespace:'ns-2', workload:'worker-svc', podName:'translator', inputToken:2100, outputToken:1900, totalToken:4000, trend:'flat', trendPct:'持平' },
 ];
 
 const resourceData = [
-  { id:'prod-ns1-agent-smart-pro', cpu:42, cpuCore:'0.8/2 Core', mem:512, memTotal:'/ 2GB', status:'normal' },
-  { id:'test-ns2-agent-code-review', cpu:68, cpuCore:'1.4/2 Core', mem:890, memTotal:'/ 2GB', status:'normal' },
-  { id:'prod-ns1-agent-data-analyze', cpu:89, cpuCore:'1.8/2 Core', mem:1638, memTotal:'/ 2GB', status:'warn' },
-  { id:'dev-ns3-agent-doc-writer', cpu:35, cpuCore:'0.7/2 Core', mem:420, memTotal:'/ 2GB', status:'normal' },
-  { id:'prod-ns1-agent-cs-bot', cpu:91, cpuCore:'1.82/2 Core', mem:1800, memTotal:'/ 2GB', status:'warn' },
+  { cluster:'prod-cl', namespace:'ns-1', workload:'agent-svc', podName:'smart-pro', cpu:42, cpuCore:'0.8/2 Core', mem:512, memTotal:'/ 2GB' },
+  { cluster:'test-cl', namespace:'ns-2', workload:'agent-svc', podName:'code-review', cpu:68, cpuCore:'1.4/2 Core', mem:890, memTotal:'/ 2GB' },
+  { cluster:'prod-cl', namespace:'ns-1', workload:'agent-svc', podName:'data-analyze', cpu:89, cpuCore:'1.8/2 Core', mem:1638, memTotal:'/ 2GB' },
+  { cluster:'dev-cl', namespace:'ns-3', workload:'agent-svc', podName:'doc-writer', cpu:35, cpuCore:'0.7/2 Core', mem:420, memTotal:'/ 2GB' },
+  { cluster:'prod-cl', namespace:'ns-1', workload:'agent-svc', podName:'cs-bot', cpu:91, cpuCore:'1.82/2 Core', mem:1800, memTotal:'/ 2GB' },
+  { cluster:'test-cl', namespace:'ns-2', workload:'agent-svc', podName:'sql-query', cpu:55, cpuCore:'1.1/2 Core', mem:780, memTotal:'/ 2GB' },
+  { cluster:'prod-cl', namespace:'ns-2', workload:'worker-svc', podName:'translator', cpu:28, cpuCore:'0.56/2 Core', mem:380, memTotal:'/ 2GB' },
 ];
 
-// ── Navigation ──────────────────
+// ── Navigation config ──────────────────
 const userNav = [
   { id:'template-market', label:'模板市场', icon:'📦' },
   { id:'my-instances', label:'我的实例', icon:'📋' },
@@ -397,6 +495,7 @@ function toggleRole() {
 // ── Navigation ──────────────────
 function navigate(pageId, params) {
   currentPage = pageId;
+  hideSkillPopover();
   renderNav();
   const main = document.getElementById('mainContent');
   switch(pageId) {
@@ -423,6 +522,77 @@ function openDrawer(content) {
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawerOverlay').classList.remove('open');
+}
+
+// ── Skill popover ──────────────────
+function showSkillPopover(skillName, e) {
+  const desc = skillDescriptions[skillName] || '暂无描述';
+  const pop = document.getElementById('skillPopover');
+  pop.innerHTML = `<div class="popover-skill-name">${skillName}</div><div class="popover-skill-desc">${desc}</div>`;
+  pop.classList.add('show');
+  positionPopover(pop, e.target);
+}
+function hideSkillPopover() {
+  document.getElementById('skillPopover').classList.remove('show');
+}
+function positionPopover(pop, target) {
+  const rect = target.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.left;
+  if (left + 260 > window.innerWidth) left = window.innerWidth - 270;
+  if (top + 80 > window.innerHeight) top = rect.top - 86;
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.skill-tag.clickable') && !e.target.closest('.skill-popover')) {
+    hideSkillPopover();
+  }
+});
+
+// ── Edit modal ──────────────────
+function openEditModal(instanceId) {
+  const inst = instances.find(i => i.id === instanceId);
+  if (!inst) return;
+  editingInstanceId = instanceId;
+  document.getElementById('editModalName').value = inst.name;
+  document.getElementById('editModalDesc').value = inst.desc;
+  document.getElementById('editModalCount').textContent = inst.desc.length;
+  document.getElementById('editModalNameError').style.display = 'none';
+  document.getElementById('editModalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('editModalName').focus(), 100);
+}
+function closeEditModal() {
+  document.getElementById('editModalOverlay').classList.remove('open');
+  editingInstanceId = null;
+}
+function validateEditModal() {
+  const name = document.getElementById('editModalName').value;
+  const err = document.getElementById('editModalNameError');
+  const btn = document.getElementById('editModalSaveBtn');
+  err.style.display = 'none';
+  btn.disabled = false;
+  if (name.length > 50) { err.textContent = '实例名称不能超过50字符'; err.style.display = 'block'; btn.disabled = true; return; }
+  if (name && !/^[一-龥a-zA-Z0-9_\-]*$/.test(name)) { err.textContent = '实例名称只允许中文、英文、数字、下划线、中划线'; err.style.display = 'block'; btn.disabled = true; return; }
+}
+function saveEditModal() {
+  const name = document.getElementById('editModalName').value.trim();
+  const desc = document.getElementById('editModalDesc').value.trim();
+  if (!name) {
+    document.getElementById('editModalNameError').textContent = '请输入实例名称';
+    document.getElementById('editModalNameError').style.display = 'block';
+    return;
+  }
+  const inst = instances.find(i => i.id === editingInstanceId);
+  if (!inst) return;
+  inst.name = name;
+  inst.desc = desc || '暂无描述';
+  inst.updatedAt = new Date().toISOString().replace('T',' ').substring(0,16);
+  closeEditModal();
+  showToast('修改成功');
+  if (currentPage === 'my-instances') navigate('my-instances');
+  else if (currentPage === 'instance-detail') navigate('instance-detail', { instanceId: inst.id });
+  else if (currentPage === 'admin-instances') navigate('admin-instances');
 }
 
 // ── Toggle switch logic ──────────────────
@@ -466,7 +636,7 @@ function renderTemplateMarket(main) {
             <div class="card-title">🤖 ${t.name}</div>
           </div>
           <div class="card-desc">${t.desc}</div>
-          <div class="skill-tags">${t.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+          <div class="skill-tags">${t.skills.map(s => `<span class="skill-tag clickable" onclick="event.stopPropagation(); showSkillPopover('${s}', event)">${s}</span>`).join('')}</div>
           <div style="margin-top:auto;">
             <button class="btn btn-primary btn-sm" style="width:100%;" onclick="event.stopPropagation(); navigate('create-instance', {templateId:'${t.id}'})">使用此模板 →</button>
           </div>
@@ -478,7 +648,9 @@ function renderTemplateMarket(main) {
 }
 
 function filterTemplateCards(val, type) {
-  const cards = document.querySelectorAll('#templateGrid .card');
+  const grid = document.getElementById('templateGrid');
+  if (!grid) return;
+  const cards = grid.querySelectorAll('.card');
   cards.forEach(c => {
     let show = true;
     if (type === 'category' && val) show = c.dataset.category === val;
@@ -500,15 +672,18 @@ function renderMyInstances(main) {
     </div>
     <div class="card-grid" id="instanceGrid">
       ${myInstances.map(i => `
-        <div class="card" data-name="${i.name}" onclick="navigate('instance-detail', {instanceId:'${i.id}'})">
+        <div class="card" data-name="${i.name}">
           <div class="card-header">
             ${statusBadge(i.status)}
-            <button class="toggle ${i.status==='running'?'on':''}" onclick="event.stopPropagation(); toggleMyInstance('${i.id}', this)" ${(i.status!=='running'&&i.status!=='stopped')?'disabled style=opacity:.5;pointer-events:none':''}></button>
+            <button class="toggle ${i.status==='running'?'on':''}" onclick="event.stopPropagation(); toggleMyInstance('${i.id}', this)" ${(i.status!=='running'&&i.status!=='stopped'&&i.status!=='failed')?'disabled style=opacity:.5;pointer-events:none':''}></button>
           </div>
-          <div class="card-title">${i.name}</div>
-          <div class="card-desc">${i.desc.substring(0,50)}...</div>
-          <div class="skill-tags">${i.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
-          <div class="card-time">创建于 ${i.createdAt.split(' ')[0]}</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="card-title" style="cursor:pointer;flex:1;" onclick="navigate('instance-detail', {instanceId:'${i.id}'})">${i.name}</div>
+            <button class="card-edit-btn" onclick="event.stopPropagation(); openEditModal('${i.id}')" title="编辑名称和描述">✎</button>
+          </div>
+          <div class="card-desc" onclick="navigate('instance-detail', {instanceId:'${i.id}'})" style="cursor:pointer;">${i.desc.substring(0,50)}${i.desc.length>50?'...':''}</div>
+          <div class="skill-tags">${i.skills.map(s => `<span class="skill-tag clickable" onclick="event.stopPropagation(); showSkillPopover('${s}', event)">${s}</span>`).join('')}</div>
+          <div class="card-time" onclick="navigate('instance-detail', {instanceId:'${i.id}'})" style="cursor:pointer;">创建于 ${i.createdAt.split(' ')[0]}</div>
         </div>
       `).join('')}
     </div>
@@ -521,11 +696,15 @@ function toggleMyInstance(id, btn) {
   if (!inst) return;
   if (inst.status === 'running') { inst.status = 'stopped'; btn.classList.remove('on'); showToast('实例已停用'); }
   else if (inst.status === 'stopped') { inst.status = 'running'; btn.classList.add('on'); showToast('实例已启用'); }
-  btn.parentElement.parentElement.querySelector('.status').outerHTML = statusBadge(inst.status);
+  else if (inst.status === 'failed') { inst.status = 'starting'; btn.classList.add('on'); showToast('实例已重新启动，进入启动流程'); }
+  const statusEl = btn.parentElement.querySelector('.status');
+  if (statusEl) statusEl.outerHTML = statusBadge(inst.status);
 }
 
 function filterInstanceCards(val) {
-  document.querySelectorAll('#instanceGrid .card').forEach(c => {
+  const grid = document.getElementById('instanceGrid');
+  if (!grid) return;
+  grid.querySelectorAll('.card').forEach(c => {
     c.style.display = c.dataset.name.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
   });
 }
@@ -545,7 +724,7 @@ function renderCreateInstance(main, params) {
           <div>
             <div class="tp-name">${tpl.name}</div>
             <div class="tp-desc">${tpl.desc}</div>
-            <div class="skill-tags" style="margin-top:6px;">${tpl.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+            <div class="skill-tags" style="margin-top:6px;">${tpl.skills.map(s => `<span class="skill-tag clickable" onclick="event.stopPropagation(); showSkillPopover('${s}', event)">${s}</span>`).join('')}</div>
           </div>
         </div>
       </div>
@@ -557,8 +736,8 @@ function renderCreateInstance(main, params) {
       </div>
       <div class="form-group">
         <label>实例描述</label>
-        <textarea id="instDesc" placeholder="请输入实例描述，简要说明用途..." maxlength="200" oninput="document.getElementById('descCount').textContent=this.value.length"></textarea>
-        <div class="hint"><span id="descCount">0</span>/200</div>
+        <textarea id="instDesc" placeholder="请输入实例描述，简要说明用途..." maxlength="200" oninput="document.getElementById('descCount').textContent=this.value.length">${tpl.desc}</textarea>
+        <div class="hint"><span id="descCount">${tpl.desc.length}</span>/200</div>
       </div>
       <div class="form-actions">
         <button class="btn btn-outline" onclick="navigate('template-market')">取消</button>
@@ -591,7 +770,7 @@ function createInstance(templateId) {
   const newInst = {
     id: 'A' + String(instances.length + 1).padStart(3, '0'),
     name, userId:'zhangsan', userName:'张三', template: tpl.name,
-    env:'生产', status:'review', skills: [...tpl.skills],
+    env:'生产网', status:'review', skills: [...tpl.skills],
     desc: desc || '暂无描述', createdAt: new Date().toISOString().replace('T',' ').substring(0,16),
     updatedAt: new Date().toISOString().replace('T',' ').substring(0,16),
     cpu:0, mem:0, inputToken:0, outputToken:0, totalToken:0, reviewComment:''
@@ -607,9 +786,9 @@ function renderInstanceDetail(main, params) {
   if (!inst) return navigate('my-instances');
   const canToggle = inst.status === 'running' || inst.status === 'stopped';
   const canChat = inst.status === 'running';
-  const isReview = inst.status === 'review';
   const isRejected = inst.status === 'rejected';
   const isRunning = inst.status === 'running';
+  const isFailed = inst.status === 'failed';
 
   main.innerHTML = `
     <button class="back-link" onclick="navigate('my-instances')">← 返回实例列表</button>
@@ -617,10 +796,12 @@ function renderInstanceDetail(main, params) {
       <div style="display:flex;align-items:center;gap:12px;">
         <div class="page-title" style="margin-bottom:0;">${inst.name}</div>
         ${statusBadge(inst.status)}
+        <button class="card-edit-btn" onclick="openEditModal('${inst.id}')" title="编辑名称和描述" style="width:28px;height:28px;">✎</button>
       </div>
       <div class="detail-actions">
         ${isRunning ? `<button class="btn btn-outline btn-sm" onclick="doStopInstance('${inst.id}')">⏸ 停用</button>` : ''}
         ${inst.status==='stopped' ? `<button class="btn btn-primary btn-sm" onclick="doStartInstance('${inst.id}')">▶ 启用</button>` : ''}
+        ${inst.status==='failed' ? `<button class="btn btn-primary btn-sm" onclick="doStartInstance('${inst.id}')">▶ 重新启动</button>` : ''}
         ${canChat ? `<button class="btn btn-primary btn-sm">💬 进入对话</button>` : ''}
       </div>
     </div>
@@ -631,11 +812,11 @@ function renderInstanceDetail(main, params) {
     </div>
 
     <div class="detail-block">
-      <h3>📦 技能</h3>
-      <div class="skill-tags">${inst.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+      <h3>📦 技能 <span style="font-weight:400;font-size:12px;color:#94a3b8;">（点击技能名称可查看技能描述）</span></h3>
+      <div class="skill-tags">${inst.skills.map(s => `<span class="skill-tag clickable" onclick="event.stopPropagation(); showSkillPopover('${s}', event)">${s}</span>`).join('')}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;">
         <div class="detail-item"><div class="dlabel">所属模板</div><div class="dvalue">${inst.template}</div></div>
-        <div class="detail-item"><div class="dlabel">所属环境</div><div class="dvalue">${inst.env}环境</div></div>
+        <div class="detail-item"><div class="dlabel">所属环境</div><div class="dvalue">${inst.env}</div></div>
         <div class="detail-item"><div class="dlabel">创建时间</div><div class="dvalue">${inst.createdAt}</div></div>
         <div class="detail-item"><div class="dlabel">最近更新</div><div class="dvalue">${inst.updatedAt}</div></div>
       </div>
@@ -645,6 +826,13 @@ function renderInstanceDetail(main, params) {
     <div class="detail-block" style="border-left:4px solid #ef4444;">
       <h3>📋 审核意见</h3>
       <p style="font-size:14px;color:#991b1b;">${inst.reviewComment}</p>
+    </div>
+    ` : ''}
+
+    ${isFailed ? `
+    <div class="detail-block" style="border-left:4px solid #f59e0b;">
+      <h3>⚠ 启动失败</h3>
+      <p style="font-size:14px;color:#92400e;">实例启动失败，一期暂无详细日志。请稍后重试或联系管理员。（启动日志将后续版本支持）</p>
     </div>
     ` : ''}
 
@@ -665,7 +853,10 @@ function doStopInstance(id) {
 }
 function doStartInstance(id) {
   const inst = instances.find(i => i.id === id);
-  if (inst && inst.status === 'stopped') { inst.status = 'running'; showToast('实例已启用'); navigate('instance-detail', {instanceId:id}); }
+  if (!inst) return;
+  if (inst.status === 'stopped') { inst.status = 'running'; showToast('实例已启用'); }
+  else if (inst.status === 'failed') { inst.status = 'starting'; showToast('实例已重新启动，进入启动流程'); }
+  navigate('instance-detail', {instanceId:id});
 }
 
 // ── 4.5 管理端 - 模板管理 ──────────────────
@@ -685,12 +876,13 @@ function renderAdminTemplates(main) {
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>名称</th><th>描述</th><th>状态</th><th>创建时间</th></tr></thead>
+        <thead><tr><th>名称</th><th>描述</th><th>技能</th><th>状态</th><th>创建时间</th></tr></thead>
         <tbody id="adminTemplateTableBody">
           ${templates.map(t => `
             <tr data-name="${t.name}" data-status="${t.status}">
               <td style="font-weight:600;">${t.name}</td>
-              <td style="max-width:400px;">${t.desc}</td>
+              <td style="max-width:350px;">${t.desc}</td>
+              <td><div class="skill-tags">${t.skills.map(s => `<span class="skill-tag clickable" onclick="event.stopPropagation(); showSkillPopover('${s}', event)">${s}</span>`).join('')}</div></td>
               <td>${t.status==='enabled'?'<span class="status running"><span class="status-dot"></span>启用</span>':'<span class="status stopped"><span class="status-dot"></span>停用</span>'}</td>
               <td>${t.createdAt}</td>
             </tr>
@@ -699,11 +891,16 @@ function renderAdminTemplates(main) {
       </table>
     </div>
     <div class="pagination">共 ${templates.length} 条 · &lt; 1 &gt;</div>
+    <div style="margin-top:12px;padding:10px 14px;background:#fef3c7;border-radius:8px;font-size:12px;color:#92400e;">
+      ⚠️ 模板启停用为二期功能，当前仅支持查看
+    </div>
   `;
 }
 
 function filterAdminTemplateTable(val, type) {
-  document.querySelectorAll('#adminTemplateTableBody tr').forEach(row => {
+  const tbody = document.getElementById('adminTemplateTableBody');
+  if (!tbody) return;
+  tbody.querySelectorAll('tr').forEach(row => {
     let show = true;
     if (type === 'status' && val) show = row.dataset.status === val;
     else if (!type && val) show = row.dataset.name.toLowerCase().includes(val.toLowerCase());
@@ -716,23 +913,23 @@ function renderAdminInstances(main) {
   main.innerHTML = `
     <div class="page-title">智能体实例管理</div>
     <div class="toolbar">
-      <div class="search-box" style="max-width:300px;">
+      <div class="search-box" style="max-width:320px;">
         <span class="search-icon">🔍</span>
         <input type="text" placeholder="搜索ID/名称/用户..." oninput="filterAdminInstanceTable(this.value)">
       </div>
       <select class="filter-select" onchange="filterAdminInstanceTable(this.value,'status')">
         <option value="">状态：全部</option>
         <option value="review">审核中</option>
-        <option value="passed">已通过</option>
-        <option value="rejected">已拒绝</option>
+        <option value="starting">启动中</option>
         <option value="running">运行中</option>
         <option value="stopped">已停用</option>
+        <option value="rejected">已拒绝</option>
+        <option value="failed">启动失败</option>
       </select>
       <select class="filter-select" onchange="filterAdminInstanceTable(this.value,'env')">
         <option value="">环境：全部</option>
-        <option value="生产">生产</option>
-        <option value="测试">测试</option>
-        <option value="开发">开发</option>
+        <option value="生产网">生产网</option>
+        <option value="办公网">办公网</option>
       </select>
     </div>
     <div class="table-wrap">
@@ -747,7 +944,7 @@ function renderAdminInstances(main) {
               <td>${i.template}</td>
               <td>${i.env}</td>
               <td>${statusBadge(i.status)}</td>
-              <td><button class="toggle ${i.status==='running'?'on':''}" onclick="adminToggleInstance('${i.id}', this)" ${(i.status!=='running'&&i.status!=='stopped')?'disabled style=opacity:.5;pointer-events:none':''}></button></td>
+              <td><button class="toggle ${i.status==='running'?'on':''}" onclick="adminToggleInstance('${i.id}', this)" ${(i.status!=='running'&&i.status!=='stopped'&&i.status!=='failed')?'disabled style=opacity:.5;pointer-events:none':''}></button></td>
               <td><button class="btn btn-outline btn-sm" onclick="openInstanceDrawer('${i.id}')">查看</button></td>
             </tr>
           `).join('')}
@@ -763,6 +960,7 @@ function adminToggleInstance(id, btn) {
   if (!inst) return;
   if (inst.status === 'running') { inst.status = 'stopped'; btn.classList.remove('on'); showToast('实例已停用'); }
   else if (inst.status === 'stopped') { inst.status = 'running'; btn.classList.add('on'); showToast('实例已启用'); }
+  else if (inst.status === 'failed') { inst.status = 'starting'; btn.classList.add('on'); showToast('实例已重新启动，进入启动流程'); }
   const statusCell = btn.closest('tr').querySelector('td:nth-child(6)');
   statusCell.innerHTML = statusBadge(inst.status);
 }
@@ -787,10 +985,10 @@ function openInstanceDrawer(id) {
       </div>
       <div class="drawer-section">
         <h4>技能</h4>
-        <div class="skill-tags">${inst.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+        <div class="skill-tags">${inst.skills.map(s => `<span class="skill-tag clickable" onclick="event.stopPropagation(); showSkillPopover('${s}', event)">${s}</span>`).join('')}</div>
       </div>
       <div class="drawer-section">
-        <div class="drawer-info-row"><span class="label">所属环境</span><span class="value">${inst.env}环境</span></div>
+        <div class="drawer-info-row"><span class="label">所属环境</span><span class="value">${inst.env}</span></div>
         <div class="drawer-info-row"><span class="label">所属用户</span><span class="value">${inst.userName}</span></div>
         <div class="drawer-info-row"><span class="label">创建时间</span><span class="value">${inst.createdAt}</span></div>
         <div class="drawer-info-row"><span class="label">最近更新</span><span class="value">${inst.updatedAt}</span></div>
@@ -822,7 +1020,9 @@ function openInstanceDrawer(id) {
 }
 
 function filterAdminInstanceTable(val, type) {
-  document.querySelectorAll('#adminInstanceTableBody tr').forEach(row => {
+  const tbody = document.getElementById('adminInstanceTableBody');
+  if (!tbody) return;
+  tbody.querySelectorAll('tr').forEach(row => {
     let show = true;
     if (type === 'status' && val) show = row.dataset.status === val;
     else if (type === 'env' && val) show = row.dataset.env === val;
@@ -867,7 +1067,9 @@ function renderAdminPermissions(main) {
 
 function filterPermissionTable(val) {
   const q = val.toLowerCase();
-  document.querySelectorAll('#permissionTableBody tr').forEach(row => {
+  const tbody = document.getElementById('permissionTableBody');
+  if (!tbody) return;
+  tbody.querySelectorAll('tr').forEach(row => {
     row.style.display = (row.dataset.name.toLowerCase().includes(q) || row.dataset.dept.toLowerCase().includes(q)) ? '' : 'none';
   });
 }
@@ -876,9 +1078,13 @@ function filterPermissionTable(val) {
 let opsRefreshInterval = null;
 
 function renderAdminOps(main) {
-  const running = instances.filter(i => i.status === 'running').length;
-  const stopped = instances.filter(i => i.status === 'stopped').length;
-  const total = instances.length;
+  const statusCounts = { review: 0, starting: 0, running: 0, stopped: 0, rejected: 0, failed: 0 };
+  instances.forEach(i => { if (statusCounts[i.status] !== undefined) statusCounts[i.status]++; });
+  const totalInput = tokenData.reduce((s, t) => s + t.inputToken, 0);
+  const totalOutput = tokenData.reduce((s, t) => s + t.outputToken, 0);
+
+  const clusters = [...new Set(tokenData.map(t => t.cluster))];
+  const namespaces = [...new Set(tokenData.map(t => t.namespace))];
 
   main.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
@@ -890,28 +1096,65 @@ function renderAdminOps(main) {
     </div>
 
     <div class="stats-row">
-      <div class="stat-card" style="text-align:center;">
-        <div class="stat-label">📦 实例总数</div>
-        <div class="stat-value" id="statTotal">${total}</div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot" style="background:#3b82f6;width:8px;height:8px;"></span> 审核中</div>
+        <div class="stat-value" style="color:#2563eb;">${statusCounts.review}</div>
       </div>
-      <div class="stat-card" style="text-align:center;">
-        <div class="stat-label">● 运行中</div>
-        <div class="stat-value" style="color:#16a34a;" id="statRunning">${running}</div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot" style="background:#f59e0b;width:8px;height:8px;"></span> 启动中</div>
+        <div class="stat-value" style="color:#d97706;">${statusCounts.starting}</div>
       </div>
-      <div class="stat-card" style="text-align:center;">
-        <div class="stat-label">⏸ 已停用</div>
-        <div class="stat-value" style="color:#6b7280;" id="statStopped">${stopped}</div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot" style="background:#22c55e;width:8px;height:8px;"></span> 运行中</div>
+        <div class="stat-value" style="color:#16a34a;">${statusCounts.running}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot" style="background:#9ca3af;width:8px;height:8px;"></span> 已停用</div>
+        <div class="stat-value" style="color:#6b7280;">${statusCounts.stopped}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot" style="background:#ef4444;width:8px;height:8px;"></span> 已拒绝</div>
+        <div class="stat-value" style="color:#dc2626;">${statusCounts.rejected}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot" style="background:#ef4444;width:8px;height:8px;"></span> 启动失败</div>
+        <div class="stat-value" style="color:#dc2626;">${statusCounts.failed}</div>
+      </div>
+      <div class="stat-card token-card">
+        <div class="stat-label">📥 总输入 Token</div>
+        <div class="stat-value" style="color:#2563eb;">${formatK(totalInput)}</div>
+      </div>
+      <div class="stat-card token-card">
+        <div class="stat-label">📤 总输出 Token</div>
+        <div class="stat-value" style="color:#7c3aed;">${formatK(totalOutput)}</div>
       </div>
     </div>
 
     <div style="font-weight:600;font-size:16px;margin-bottom:12px;">Token 消耗统计（按天）</div>
+    <div class="toolbar">
+      <div class="search-box" style="max-width:260px;">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="搜索实例名称..." oninput="filterOpsTable('token', this.value)">
+      </div>
+      <select class="filter-select" onchange="filterOpsTable('token', this.value, 'cluster')">
+        <option value="">集群：全部</option>
+        ${clusters.map(c => `<option value="${c}">${c}</option>`).join('')}
+      </select>
+      <select class="filter-select" onchange="filterOpsTable('token', this.value, 'namespace')">
+        <option value="">命名空间：全部</option>
+        ${namespaces.map(n => `<option value="${n}">${n}</option>`).join('')}
+      </select>
+    </div>
     <div class="table-wrap" style="margin-bottom:24px;">
       <table>
-        <thead><tr><th>实例 ID</th><th>输入 Token</th><th>输出 Token</th><th>总量 Token</th><th>趋势</th></tr></thead>
-        <tbody>
+        <thead><tr><th>集群</th><th>命名空间</th><th>工作负载</th><th>podName</th><th>输入 Token</th><th>输出 Token</th><th>总量 Token</th><th>趋势</th></tr></thead>
+        <tbody id="tokenTableBody">
           ${tokenData.map(t => `
-            <tr>
-              <td style="font-family:monospace;font-size:12px;">${t.id}</td>
+            <tr data-cluster="${t.cluster}" data-namespace="${t.namespace}" data-pod="${t.podName}">
+              <td style="font-family:monospace;font-size:12px;">${t.cluster}</td>
+              <td style="font-family:monospace;font-size:12px;">${t.namespace}</td>
+              <td>${t.workload}</td>
+              <td style="font-weight:500;">${t.podName}</td>
               <td>${t.inputToken.toLocaleString()}</td>
               <td>${t.outputToken.toLocaleString()}</td>
               <td style="font-weight:600;">${t.totalToken.toLocaleString()}</td>
@@ -923,38 +1166,57 @@ function renderAdminOps(main) {
     </div>
     <div class="pagination" style="justify-content:flex-end;padding:0;margin:-16px 0 24px;">共 ${tokenData.length} 条 · &lt; 1 &gt;</div>
 
-    <div style="font-weight:600;font-size:16px;margin-bottom:12px;">资源监控（实时）</div>
+    <div style="font-weight:600;font-size:16px;margin-bottom:12px;">资源监控</div>
+    <div class="toolbar">
+      <div class="search-box" style="max-width:260px;">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="搜索实例名称..." oninput="filterOpsTable('resource', this.value)">
+      </div>
+      <select class="filter-select" onchange="filterOpsTable('resource', this.value, 'cluster')">
+        <option value="">集群：全部</option>
+        ${clusters.map(c => `<option value="${c}">${c}</option>`).join('')}
+      </select>
+      <select class="filter-select" onchange="filterOpsTable('resource', this.value, 'namespace')">
+        <option value="">命名空间：全部</option>
+        ${namespaces.map(n => `<option value="${n}">${n}</option>`).join('')}
+      </select>
+    </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>实例 ID</th><th>CPU 使用率</th><th>内存使用量</th><th>状态</th></tr></thead>
-        <tbody>
-          ${resourceData.map(r => `
-            <tr>
-              <td style="font-family:monospace;font-size:12px;">${r.id}</td>
+        <thead><tr><th>集群</th><th>命名空间</th><th>工作负载</th><th>podName</th><th>CPU 使用率</th><th>内存使用量</th></tr></thead>
+        <tbody id="resourceTableBody">
+          ${resourceData.map(r => {
+            const cpuWarn = r.cpu > 80;
+            const memWarn = r.mem > 1638;
+            const rowClass = (cpuWarn || memWarn) ? 'row-warn' : '';
+            return `
+            <tr class="${rowClass}" data-cluster="${r.cluster}" data-namespace="${r.namespace}" data-pod="${r.podName}">
+              <td style="font-family:monospace;font-size:12px;">${r.cluster}</td>
+              <td style="font-family:monospace;font-size:12px;">${r.namespace}</td>
+              <td>${r.workload}</td>
+              <td style="font-weight:500;">${r.podName}</td>
               <td>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <div class="progress-bar" style="flex:1;min-width:80px;"><div class="fill ${r.cpu>80?'danger':r.cpu>60?'warn':'normal'}" style="width:${r.cpu}%"></div></div>
-                  <span style="font-weight:600;white-space:nowrap;">${r.cpu}%</span>
+                  <div class="progress-bar" style="flex:1;min-width:80px;"><div class="fill ${cpuWarn?'danger':'normal'}" style="width:${r.cpu}%"></div></div>
+                  <span style="font-weight:600;white-space:nowrap;${cpuWarn?'color:#dc2626;':''}">${r.cpu}%</span>
                 </div>
                 <div style="font-size:11px;color:#94a3b8;margin-top:2px;">${r.cpuCore}</div>
               </td>
               <td>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <div class="progress-bar" style="flex:1;min-width:80px;"><div class="fill ${r.mem>1638?'danger':r.mem>1200?'warn':'normal'}" style="width:${r.mem/2048*100}%"></div></div>
-                  <span style="font-weight:600;white-space:nowrap;">${r.mem>=1024?(r.mem/1024).toFixed(1)+'GB':r.mem+'MB'}</span>
+                  <div class="progress-bar" style="flex:1;min-width:80px;"><div class="fill ${memWarn?'danger':'normal'}" style="width:${r.mem/2048*100}%"></div></div>
+                  <span style="font-weight:600;white-space:nowrap;${memWarn?'color:#dc2626;':''}">${r.mem>=1024?(r.mem/1024).toFixed(1)+'GB':r.mem+'MB'}</span>
                 </div>
                 <div style="font-size:11px;color:#94a3b8;margin-top:2px;">${r.memTotal}</div>
               </td>
-              <td>${r.status==='warn'?'<span style="color:#d97706;font-weight:600;">⚠ 偏高</span>':'<span style="color:#16a34a;">● 正常</span>'}</td>
             </tr>
-          `).join('')}
+          `}).join('')}
         </tbody>
       </table>
     </div>
     <div class="pagination" style="justify-content:flex-end;padding:0;margin-top:16px;">共 ${resourceData.length} 条 · &lt; 1 &gt;</div>
   `;
 
-  // Simulated countdown
   let countdown = 30;
   if (opsRefreshInterval) clearInterval(opsRefreshInterval);
   opsRefreshInterval = setInterval(() => {
@@ -965,17 +1227,39 @@ function renderAdminOps(main) {
   }, 1000);
 }
 
+function filterOpsTable(table, val, type) {
+  const tbody = document.getElementById(table === 'token' ? 'tokenTableBody' : 'resourceTableBody');
+  if (!tbody) return;
+  tbody.querySelectorAll('tr').forEach(row => {
+    let show = true;
+    if (type === 'cluster' && val) show = row.dataset.cluster === val;
+    else if (type === 'namespace' && val) show = row.dataset.namespace === val;
+    else if (!type && val) {
+      const q = val.toLowerCase();
+      show = row.dataset.pod.toLowerCase().includes(q) || row.dataset.cluster.toLowerCase().includes(q);
+    }
+    row.style.display = show ? '' : 'none';
+  });
+}
+
 // ── Helpers ──────────────────
 function statusBadge(s) {
   const map = {
-    review: ['审核中','review'],
-    passed: ['已通过','passed'],
-    rejected: ['已拒绝','rejected'],
-    running: ['运行中','running'],
-    stopped: ['已停用','stopped'],
+    review:   ['审核中',  'review'],
+    starting: ['启动中',  'starting'],
+    running:  ['运行中',  'running'],
+    stopped:  ['已停用',  'stopped'],
+    rejected: ['已拒绝',  'rejected'],
+    failed:   ['启动失败', 'failed'],
   };
   const [label, cls] = map[s] || ['未知','stopped'];
   return `<span class="status ${cls}"><span class="status-dot"></span>${label}</span>`;
+}
+
+function formatK(n) {
+  if (n >= 10000) return (n/10000).toFixed(1) + 'W';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return String(n);
 }
 
 // ── Init ──────────────────
